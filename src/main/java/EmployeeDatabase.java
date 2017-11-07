@@ -10,12 +10,12 @@ import java.util.List;
  *
  * @see <a href="https://cs125.cs.illinois.edu/lab/10/">Lab 10 Description</a>
  */
-public class EmployeeDatabase {
+public final class EmployeeDatabase {
 
     /**
      * List of employees.
      */
-    public List<Employee> employees;
+    private List<Employee> employees;
 
     /**
      * Constructor which initializes the employees list.
@@ -30,8 +30,8 @@ public class EmployeeDatabase {
     /**
      * Returns the manager for the given employee.
      *
-     * @param employee
-     * @return
+     * @param employee the employee to find the manager of.
+     * @return the manager
      */
     Employee findManager(final Employee employee) {
         Employee manager = null;
@@ -56,6 +56,10 @@ public class EmployeeDatabase {
         /*
          * Implement this function
          */
+        if (findManager(employee) == null) {
+            return 0;
+        }
+        return 1 + countManagersAbove(findManager(employee));
     }
 
     /**
@@ -70,6 +74,28 @@ public class EmployeeDatabase {
         /*
          * Implement this function
          */
+        boolean hasEmployee = false;
+        Employee employeeUnder1 = null;
+        Employee employeeUnder2 = null;
+        int count = 0;
+        if (employee == null) {
+            return 0;
+        }
+        for (int i = 0; i < employees.size(); i++) {
+            if (findManager(employees.get(i)) == employee) {
+                hasEmployee = true;
+                if (employeeUnder1 == null) {
+                    employeeUnder1 = employees.get(i);
+                } else {
+                    employeeUnder2 = employees.get(i);
+                }
+                count++;
+            }
+        }
+        if (hasEmployee == false) {
+            return 0;
+        }
+        return count + countEmployeesUnder(employeeUnder1) + countEmployeesUnder(employeeUnder2);
     }
 
     /**
